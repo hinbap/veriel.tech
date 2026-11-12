@@ -1,26 +1,193 @@
 @import "tailwindcss";
 
+/* `light:` variant. Dark is the default; add class="light" to <html> for light. */
+@custom-variant light (&:where(.light, .light *));
+
+/* ---------------------------------------------------------------
+   Veriel tokens (from the Veriel design system)
+   --------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+  --ground: #0a0c0b;
+  --surface: #121513;
+  --raised: #1a1e1b;
+  --line: #272c28;
+  --line-strong: #434a45;
+  --ink: #e9ede8;
+  --muted: #949b95;
+  --green: #5bd684;
+  --green-deep: #1d9d54;
+  --green-text: #5bd684;
+  /* per-app highlight; overridden by .hl-1 … .hl-6 */
+  --hl: #5bd684;
+  --hl-text: #5bd684;
 }
+
+.light {
+  color-scheme: light;
+  --ground: #f1f3ee;
+  --surface: #ffffff;
+  --raised: #e4e8e1;
+  --line: #d0d6cd;
+  --line-strong: #9fa89f;
+  --ink: #101311;
+  --muted: #566058;
+  --green: #1d9d54;
+  --green-deep: #137a3f;
+  --green-text: #137a3f;
+  --hl: #1d9d54;
+  --hl-text: #137a3f;
+}
+
+/* App highlight colours: --hl is the fill, --hl-text is readable as text. */
+.hl-1 { --hl: #5bd684; --hl-text: #5bd684; }
+.hl-2 { --hl: #45cfd6; --hl-text: #45cfd6; }
+.hl-3 { --hl: #6cb1ff; --hl-text: #6cb1ff; }
+.hl-4 { --hl: #b296ff; --hl-text: #b296ff; }
+.hl-5 { --hl: #ff8db6; --hl-text: #ff8db6; }
+.hl-6 { --hl: #ff9c66; --hl-text: #ff9c66; }
+.light .hl-1, .light.hl-1 { --hl: #1d9d54; --hl-text: #137a3f; }
+.light .hl-2, .light.hl-2 { --hl: #12a3ae; --hl-text: #0b6f78; }
+.light .hl-3, .light.hl-3 { --hl: #4a8df5; --hl-text: #1d5fc4; }
+.light .hl-4, .light.hl-4 { --hl: #9277f2; --hl-text: #6240d0; }
+.light .hl-5, .light.hl-5 { --hl: #ec6397; --hl-text: #b82864; }
+.light .hl-6, .light.hl-6 { --hl: #f2854a; --hl-text: #9a400c; }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-green: var(--green);
+  --color-green-deep: var(--green-deep);
+  --color-green-text: var(--green-text);
+  --color-green-ink: #07130c;
+  --color-hl: var(--hl);
+  --color-hl-text: var(--hl-text);
+
+  --font-display: var(--font-bricolage), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, Menlo, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@theme {
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  --animate-rise: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-glint: glint 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-lurk: lurk 9s ease-in-out infinite both;
+  --animate-fill: fill 2.8s linear both;
+  --animate-ticker: ticker 64s linear infinite;
+  --animate-pop: pop 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  --animate-bubble: bubble 0.36s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  --animate-dot: dot 1.1s ease-in-out infinite;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes glint {
+  0% { opacity: 0; transform: translateY(0.5em); color: var(--hl-text); }
+  50% { opacity: 1; transform: none; color: var(--hl-text); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes lurk {
+  0%, 70%, 100% { opacity: 0; transform: translateY(6px); }
+  12%, 58% { opacity: 1; transform: none; }
+}
+@keyframes fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes ticker {
+  to { transform: translateX(-50%); }
+}
+@keyframes pop {
+  from { transform: translateY(106%); }
+  to { transform: none; }
+}
+@keyframes bubble {
+  from { opacity: 0; transform: translateY(10px) scale(0.86); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-5px); opacity: 1; }
+}
+@keyframes blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  93%, 96% { transform: scaleY(0.12); }
+}
+@keyframes wink {
+  0%, 68%, 100% { transform: scaleY(1); }
+  74%, 90% { transform: scaleY(0.14); }
+}
+
+/* The one mono text style in the system: small uppercase labels. */
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Thin rule with a "+" crosshair in the highlight colour (phone lists). */
+@utility cross-rule {
+  height: 9px;
+  background:
+    linear-gradient(var(--hl-text), var(--hl-text)) left 4px top 0 / 1px 9px no-repeat,
+    linear-gradient(var(--hl-text), var(--hl-text)) left 0 top 4px / 9px 1px no-repeat,
+    linear-gradient(var(--line), var(--line)) left 18px top 4px / calc(100% - 18px) 1px no-repeat;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+  }
+  :focus-visible {
+    outline: 2px solid var(--hl-text);
+    outline-offset: 3px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (max-width: 700px) {
+  html {
+    scroll-padding-top: 80px;
+  }
+}
+
+/* The lurker's eyes. They scale from their flat top edge, like eyelids. */
+.lurker-eye,
+.lurker-wink {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+}
+.lurker-eye {
+  animation: blink 4.6s infinite;
+}
+.lurker-wink {
+  animation: wink 5.5s infinite;
+}
+/* A background devil shuts its eyes when you point at it. */
+.imp:hover .lurker-eye {
+  animation: none;
+  transform: scaleY(0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
